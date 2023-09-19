@@ -25,6 +25,8 @@ jobs:
   test:
     needs: artifact1
     runs-on: ubuntu-latest
+    outputs: 
+      script-file: ${{ steps.publish.outputs.script-file }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -34,6 +36,9 @@ jobs:
         run: npm run test
       - name: Build code
         run: npm run build
+      - name: publishing output
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
 
   deploy:
     needs: test
@@ -50,6 +55,8 @@ jobs:
         with:
           name: json-files
       - name: output content
-        run: ls    
+        run: ls   
+      - name: output-filename
+        run: echo ${{ needs.build.outputs.script-file }}   
       - name: Deploy project
         run: echo "Deploying..."      
