@@ -31,7 +31,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: cashing
-        uses: action/cache@v3
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json')}}  
